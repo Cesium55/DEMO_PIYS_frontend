@@ -1,18 +1,19 @@
 <template>
-
-    <div class="video_item">
-        <div class="top_cont">
-            <div class="img_cont">
-                <img :src="thumb_path" alt="thumb" srcset="" v-if="props.thumb_path">
+    <RouterLink :to="`movie/${props.id}`">
+        <div class="video_item">
+            <div class="top_cont">
+                <div class="img_cont">
+                    <img :src="thumb_path" alt="thumb" srcset="" v-if="props.thumb_path">
+                </div>
+            </div>
+            <div class="bot_cont">
+                <div class="big_title">
+                    <span>[{{ props.id }}] </span>
+                    <span>{{ props.title }}</span>
+                </div>
             </div>
         </div>
-        <div class="bot_cont">
-            <div class="big_title">
-                <span>[{{ props.id }}] </span>
-                <span>{{ props.title }}</span>
-            </div>
-        </div>
-    </div>
+    </RouterLink>
 
 
 </template>

@@ -4,10 +4,14 @@
 
     <div class="movie_list">
 
+
+
         <div v-for="video in videos">
             <MovieItem :id="video.id" :title="video.title" :thumb_path="video.thumb_path" :video_path="video.video_path"
                 v-if="video.video_processed" />
         </div>
+
+
     </div>
 
 
