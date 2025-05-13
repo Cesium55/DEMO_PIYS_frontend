@@ -9,9 +9,13 @@
 
     </div>
     <div class="debug_info">
+        <div>Debug info: </div>
         <div>Time: {{ currentTime }}</div>
         <div>RUS: {{ subs1 }}</div>
         <div>ENG: {{ subs2 }}</div>
+        <div class="add_subs_list" v-for="sub in add_subs_list">
+            <div>{{ sub }}</div>
+        </div>
     </div>
 </template>
 
@@ -20,6 +24,8 @@ import { ref, watch, onMounted, nextTick } from 'vue';
 import Plyr from 'plyr';
 import 'plyr/dist/plyr.css';
 import SrtParser from '@/scripts/SrtParser';
+
+
 
 const props = defineProps({
     video_src: String,
@@ -37,15 +43,31 @@ const subs2 = ref("")
 
 const subs_manager = new SrtParser(props.ru_subs, props.eng_subs)
 
+
+const add_subs_list = ref([])
+
 const initPlayer = () => {
     if (player) {
         player.destroy();
     }
-    player = new Plyr(videoRef.value);
+
+
+
+
+    player = new Plyr(videoRef.value, {
+        controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'pip', 'airplay', 'fullscreen']
+    });
 
 
     const subs_cont = document.getElementsByClassName("plyr__captions")[0]
     subs_cont.style.display = "block"
+
+    const plyr_controls_cont = document.getElementsByClassName("plyr__controls")[0]
+    const add_control_btn = document.createElement("button")
+    add_control_btn.innerHTML = "+"
+    add_control_btn.addEventListener("click", add_sub_listener)
+
+    plyr_controls_cont.appendChild(add_control_btn)
 
 
 
@@ -84,6 +106,11 @@ watch(() => props.video_src, async (newSrc) => {
     }
 });
 
+
+const add_sub_listener = async () => {
+    add_subs_list.value.push(currentTime.value)
+}
+
 </script>
 
 <style scoped>
@@ -96,7 +123,7 @@ watch(() => props.video_src, async (newSrc) => {
 
 .video-container {
     position: relative;
-    width: 640px;
+    width: 800px;
     max-width: 100%;
 }
 
@@ -116,5 +143,13 @@ watch(() => props.video_src, async (newSrc) => {
 <style>
 .sub_line {
     color: white;
+}
+
+
+.add_control_btn {
+    background-color: none;
+    border: 2px white solid;
+
+    border-radius: 50%;
 }
 </style>
